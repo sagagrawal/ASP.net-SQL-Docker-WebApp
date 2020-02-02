@@ -1,4 +1,0 @@
-1. Set Mosaic -> Apply Bezel -> System Hang
-2. Set Mosaic -> Run Video in Movies&Tv -> Secondary gpu content flickers when left idle till progress bar disappear(Repro with 440.55 as well - RID Go driver)
-3. Set Mosaic -> Change Color Format settings from Change Resolution -> System Hang
-4. Set Mosaic -> Unplug all display -> Connect 1 by 1 -> System is very sluggish(Even a mouse Click takes 10 seconds)
