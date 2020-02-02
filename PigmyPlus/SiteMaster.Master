@@ -1,0 +1,326 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="SiteMaster.master.cs" Inherits="PigmyPlus.SiteMaster" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title>Pigmy Plus Care Pro</title>
+
+    <!-- for JQuery DateTimePicker -->
+    <script type="text/javascript" src="Assets/js/jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="Assets/DateTimePicker/jquery.datetimepicker.js"></script>
+    <link type="text/css" href="Assets/DateTimePicker/jquery.datetimepicker.css" rel="stylesheet" />
+    <!-- for JQuery DateTimePicker Ends-->
+
+    <link rel="stylesheet" type="text/css" href="Assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="Assets/font-awesome/css/font-awesome.min.css" />
+
+    <!-- for Select2 plugin (Advanced Combobox) -->
+    <link rel="stylesheet" href="Assets/Select2/select2.css" />
+    <script type="text/javascript" src="Assets/Select2/select2.min.js"></script>
+    <script type="text/javascript" src="Assets/js/bootstrap.min.js"></script>
+    <!-- for Select2 plugin (Advanced Combobox) Ends -->
+
+    <!-- for DataTable plugin for Table Filter -->
+    <script src="Assets/DataTables/js/jquery.dataTables.js" type="text/javascript"></script>
+    <link href="Assets/DataTables/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <script src="Assets/DataTables/js/dataTables.bootstrap.js" type="text/javascript"></script>
+    <link href="Assets/DataTables/css/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+    <!-- for DataTable plugin for Table Filter Ends -->
+
+    <!--  For Switch -->
+    <script src="Assets/switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+    <link href="Assets/switch/stylesheets/bootstrap-switch.css" rel="stylesheet" type="text/css" />
+    <!-- Switch Assets Ends -->
+
+    <!-- Following JavaScript is necessary for Select-2 Plugin of ComboBox/ListBox -->
+    <script type="text/javascript">
+        $(function () {
+            function formatResult(item) {
+                if (!item.id) {
+                    return item.text;
+                }
+                return '<i>' + item.text + '</i>';
+            }
+            function formatSelection(item) {
+                return '<b>' + item.text + '</b>';
+            }
+
+            $('select').select2({
+                formatResult: formatResult,
+                formatSelection: formatSelection
+            });
+
+            jQuery('.DateInput').datetimepicker({
+                timepicker: false,
+                format: 'd-M-Y',
+                closeOnDateSelect: true
+            });
+
+            jQuery('.DateTimeInput').datetimepicker({
+                timepicker: true,
+                format: 'd-M-Y H:i',
+                closeOnDateSelect: false,
+                allowTimes: ['07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30']
+            });
+            jQuery('.DataTable').DataTable({
+                "jQueryUI": true,
+                "pagingType": "full_numbers"
+            });
+        });
+    </script>
+    <style type="text/css">
+        body {
+            padding: 15px;
+        }
+
+        tr {
+            vertical-align: top;
+        }
+
+        td {
+            padding: 2px;
+        }
+
+        .DateInput {
+        }
+
+        .DateTimeInput {
+        }
+
+        .DataTable {
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <!-- Navigation Bar Starts-->
+        <div id="wrapper">
+            <nav role="navigation" class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only"></span> 
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" style="color:Red" href="#">Pigmy Plus Care Pro (beta)</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="Welcome.aspx"> <span class="fa fa-home fa-fw"></span> Home </a>
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="fa fa-book fa-fw"></span> Masters <span class="caret"></span> </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li> <asp:HyperLink ID="lnkAccounts" NavigateUrl="ManageAccounts.aspx" Text= '<i class="fa fa-smile-o fa-fw"></i> Accounts' runat="server" /></li>
+                        <li> <asp:HyperLink ID="lnkCustomers" NavigateUrl="ManageCustomers.aspx" Text= '<i class="fa fa-th-large fa-fw"></i> Customers' runat="server" /> </li>
+                        <li> <asp:HyperLink ID="lnkDailyTransactions" NavigateUrl="ManageDailyTransactions.aspx" Text= '<i class="fa fa-sitemap fa-fw"></i> Transactions' runat="server" /> </li>
+                        <li class="divider"> </li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="fa fa-bar-chart-o fa-fw"> </span> Reports <span class="caret"></span> </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="rptfrmTransactionByDate.aspx">Transaction By Date</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Some Link </a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">One More Link</a></li>
+                    </ul>
+                </li>
+                <li><a href="DailyEntries.aspx"> <span class="fa fa-pencil fa-fw"></span> Daily Entries </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" id="btnToggleFooter">Show/Hide Footer</a>
+                </li>                
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-user fa-fw"></i> 
+                    <asp:LoginView ID="HeadLoginView" runat="server" EnableViewState="false">
+                    <LoggedInTemplate>
+                        Hi <span class="bold"><asp:LoginName ID="HeadLoginName" runat="server" /></span>!  <i class="fa fa-caret-down"></i>
+                    <br />
+                    </LoggedInTemplate>
+                    </asp:LoginView>
+                    
+                     </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="Settings.aspx"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>                                              
+                            <asp:LoginStatus ID="lsStatus" runat="server" LogoutText='<i class="fa fa-power-off fa-fw"></i> Logout'/>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                    </li>
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+     </nav>
+            <!-- Navigation Bar Ends -->
+            <!-- Panel Starts-->
+            <!-- Page Wrapper Starts -->
+            <div id="page-wrapper">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>
+                                    <asp:ContentPlaceHolder ID="HeadingContent" runat="server">
+                                    </asp:ContentPlaceHolder>
+                                </b>
+                                <div class="pull-right">
+
+                                    <asp:ContentPlaceHolder ID="ActionContentsButtons" runat="server">
+                                    </asp:ContentPlaceHolder>
+
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">
+                                            <span style="color: White" class="fa fa-gears fa-fw"></span>Actions <span style="color: White" class="caret"></span>
+                                        </button>
+                                        <asp:ContentPlaceHolder ID="ActionContent" runat="server">
+                                        </asp:ContentPlaceHolder>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                                        </asp:ContentPlaceHolder>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Page Wrapper Ends -->
+            <!-- Panel Ends -->
+        </div>
+        <!-- Wrapper Ends -->
+
+        <!-- /Modal for Changing System Date Starts -->
+        <div class="modal fade" id="ModalChangeDate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;</button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            <span class="fa fa-calendar fa-fw"></span>Welcome to PigmyPlus care Pro</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Change System Date.
+                            </div>
+                            <div class="panel-body">
+                                <asp:DetailsView ID="dtlSystemDate" FooterStyle-HorizontalAlign="Right"
+                                    DefaultMode="Insert" runat="server" AutoGenerateRows="False" BorderStyle="None"
+                                    GridLines="None" Width="100%">
+                                    <Fields>
+                                        <asp:TemplateField HeaderText="New System Date">
+                                            <InsertItemTemplate>
+                                                <asp:TextBox ID="txtSystemDate" placeholder="Choose System Date" CssClass="form-control DateInput" runat="server" />
+                                                <asp:RequiredFieldValidator ValidationGroup="DateGroup" ID="reqDesignation" runat="server"
+                                                    Text="*" ControlToValidate="txtSystemDate" />
+                                            </InsertItemTemplate>
+                                        </asp:TemplateField>
+                                    </Fields>
+                                    <FooterStyle HorizontalAlign="Right"></FooterStyle>
+                                    <FooterTemplate>
+                                        <asp:LinkButton ID="lnkChangeSystemDate" OnClick="lnkChangeSystemDate_Click" Width="20%" ValidationGroup="DateGroup" CausesValidation="True" runat="server" Text='<i style="color:White" class="fa fa-floppy-o fa-fw"></i> Save' class="btn btn-default btn-success btn-fw" />
+                                        <button type="button" class="btn btn-default btn-success btn-fw" style="width: 20%" data-dismiss="modal"><span style="color: White" class="fa fa-undo fa-fw"></span>Close </button>
+                                    </FooterTemplate>
+                                    <InsertRowStyle HorizontalAlign="Left" VerticalAlign="Middle" />
+                                </asp:DetailsView>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /Modal for Changing System Date Ends -->
+
+        <%-- Fixed Footer Starts--%>
+        <div id="fixedfooter" class="col-lg-12 nav navbar navbar-fixed-bottom btn btn-block btn-primary" style="height: 70px;">
+            <div class="col-lg-10">
+                <table>
+                    <tr>
+                        <td rowspan="2">
+                            <asp:Label ForeColor="White" Font-Size="Larger" ID="lblShortcutKeys" Font-Bold="true" runat="server"> Shortcut<br /> Keys </asp:Label></td>
+                        <td>
+                            <asp:Label runat="server" Font-Size="Larger" ID="Label1" Font-Bold="true"> Daily Transactions Report: </asp:Label></td>
+                        <td class="col-xs-1"></td>
+                        <td>
+                            <asp:Label runat="server" Font-Size="Larger" ID="Label2" Font-Bold="true"> Ctrl+D </asp:Label></td>
+                        <td class="col-xs-1"></td>
+                        <td>
+                            <asp:Label runat="server" Font-Size="Larger" ID="Label3" Font-Bold="true"> Daily Entries: </asp:Label></td>
+                        <td class="col-xs-1"></td>
+                        <td>
+                            <asp:Label runat="server" Font-Size="Larger" ID="Label4" Font-Bold="true"> F8 </asp:Label></td>
+                        <td class="col-xs-1"></td>
+                        <td>
+                            <asp:Label runat="server" Font-Size="Larger" ID="Label5" Font-Bold="true"> Some Report: </asp:Label></td>
+                        <td class="col-xs-1"></td>
+                        <td>
+                            <asp:Label runat="server" Font-Size="Larger" ID="Label6" Font-Bold="true"> F9 </asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Label runat="server" Font-Size="Larger" ID="Label7" Font-Bold="true"> Daily Transactions Report: </asp:Label></td>
+                        <td class="col-xs-1"></td>
+                        <td>
+                            <asp:Label runat="server" Font-Size="Larger" ID="Label8" Font-Bold="true"> Ctrl+D </asp:Label></td>
+                        <td class="col-xs-1"></td>
+                        <td>
+                            <asp:Label runat="server" Font-Size="Larger" ID="Label9" Font-Bold="true"> Daily Entries: </asp:Label></td>
+                        <td class="col-xs-1"></td>
+                        <td>
+                            <asp:Label runat="server" Font-Size="Larger" ID="Label10" Font-Bold="true"> F8 </asp:Label></td>
+                        <td class="col-xs-1"></td>
+                        <td>
+                            <asp:Label runat="server" Font-Size="Larger" ID="Label11" Font-Bold="true"> Some Report: </asp:Label></td>
+                        <td class="col-xs-1"></td>
+                        <td>
+                            <asp:Label runat="server" Font-Size="Larger" ID="Label12" Font-Bold="true"> F9 </asp:Label></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="col-lg-2">
+                <div class="row">
+                    <asp:Label runat="server" ID="lnlDateText" Text="System Date: "></asp:Label>
+                    <asp:Label ForeColor="Black" ID="lblSystemDate" runat="server"></asp:Label>
+                    <asp:LinkButton ForeColor="Black" runat="server" ID="lnkChangeDate" data-toggle="modal" data-target="#ModalChangeDate" AccessKey="l" Text="<br/>(Click to Change)"></asp:LinkButton>
+                </div>
+                <div class="row">
+                    <asp:Label runat="server" ID="lblLoggedInText" Text="Logged in at: "></asp:Label>
+                    <asp:Label ForeColor="Black" runat="server" ID="txtLoggedInText"></asp:Label>
+                </div>
+            </div>
+        </div>
+        <%-- Fixed Footer Ends --%>
+        <script type="text/javascript">
+            $('#btnCloseFooter').click(function () {
+                $('#fixedfooter').fadeToggle(500);
+            });
+            $('#btnToggleFooter').click(function () {
+                $('#fixedfooter').fadeToggle(500);
+            });
+        </script>
+    </form>
+</body>
+</html>
