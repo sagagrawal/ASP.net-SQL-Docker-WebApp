@@ -1,0 +1,57 @@
+Create Database PigmyPlus
+go
+Use PigmyPlus
+go
+Create Table Users(
+	UserID		int Primary Key IDENTITY,
+	UserName	varchar(10) Unique not null,
+	Password	varchar(50) not null
+)
+go 
+Create Table Customers(
+	CustomerID			bigint Primary Key IDENTITY,
+	Name				varchar(100)	not null,
+	Address				varchar(100)	not null,
+	PhoneNo				varchar(13)		not null,
+	MobileNo			varchar(13)		not null,
+	EmailID				varchar(50)		not null,
+	Age					tinyint			null,
+	DOB					date			null,
+	CustomerUID			varchar(50)		not null,
+	CustomerPanID		varchar(50)		not null,
+	CustomerElectionID	varchar(50)		not null,
+	Gender				varchar(10)		not null,
+	CreatedOn			datetime		not null,
+	CreatedBy			varchar(10)		not null,
+	ModifiedOn			datetime		null,
+	ModifiedBy			varchar(10)		null,
+	IsDiscontinued		bit,
+	DiscontinuedBy		varchar(50) null,
+	DiscontinuedOn		datetime null
+)
+go
+Create Table Accounts(
+	AccountID	bigint Primary Key IDENTITY,
+	AccNo		bigint UNIQUE not null,
+	CustomerID	bigint references Customers not null,
+	OpeningDate	datetime not null,
+	ClosingDate	datetime null,
+	DailyAmt	smallmoney not null,
+	CreatedOn	datetime not null,
+	CreatedBy	varchar(10) not null,
+	ModifiedOn	datetime null,
+	ModifiedBy	varchar(10) null,
+	IsClosed	bit
+)
+go
+Create Table DailyTransactions(
+	TransactionID	bigint Primary Key IDENTITY,
+	AccountID 	bigint references Accounts not null,
+	TransactionDate	datetime not null,
+	Amount			smallmoney not null,
+	MadeBy			varchar(10) not null,
+	ModifiedOn		datetime null,
+	ModifiedBy		varchar(10) null
+)
+go
+ 

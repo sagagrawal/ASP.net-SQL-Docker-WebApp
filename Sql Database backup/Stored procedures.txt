@@ -1,0 +1,197 @@
+Create Procedure spAuthenticate(
+	@UserName	varchar(10),
+	@Password	varchar(50)
+)
+as
+BEGIN
+	IF EXISTS(Select * from Users where UserName=@UserName and Password=@Password)
+		Select 1 as Authenticated
+	ELSE
+		Select 0 as Authenticated
+END
+
+go
+Create Procedure [dbo].[spCustomers](
+	@CustomerID		bigint = -1,
+	@Name			varchar(100),
+	@Address		varchar(100),
+	@PhoneNo		varchar(13) = 'Not Available',
+	@MobileNo		varchar(13),
+	@EmailID		varchar(50) = 'Not Available',
+	@Age			tinyint,
+	@DOB			date,
+	@CustomerUID	varchar(50),
+	@CustomerPanID	varchar(50),
+	@CustomerElectionID	varchar(50),
+	@Gender			varchar(20) = 'Not Available',
+	@IsDiscontinued	bit = 0,
+	@UserName		varchar(50)
+)
+as
+BEGIN
+	IF(@CustomerID = -1)
+	BEGIN
+		Insert into Customers(Name, Address, PhoneNo, MobileNo, EmailID, Age, DOB, CustomerUID, CustomerPanID, CustomerElectionID, Gender, CreatedOn, CreatedBy, IsDiscontinued)
+				values(@Name, @Address, @PhoneNo, @MobileNo, @EmailID, @Age, @DOB, @CustomerUID, @CustomerPanID, @CustomerElectionID, @Gender, SYSDATETIME(), @UserName, @IsDiscontinued)
+	END
+	ELSE
+	BEGIN
+		Update Customers set Name=@Name, Address=@Address, PhoneNo=@PhoneNo, MobileNo=@MobileNo, EmailID=@EmailID, Age=@Age, DOB=@DOB, 
+							CustomerUID=@CustomerUID, CustomerPanID=@CustomerPanID, CustomerElectionID=@CustomerElectionID, Gender=@Gender,
+							ModifiedOn=SYSDATETIME(), ModifiedBy=@UserName
+							where CustomerID=@CustomerID
+		IF(@IsDiscontinued = 1)
+		BEGIN
+			Update Customers set IsDiscontinued = @IsDiscontinued, DiscontinuedOn=SYSDATETIME(), DiscontinuedBy=@UserName
+			where CustomerID=@CustomerID
+		END
+		ELSE
+		BEGIN
+			Update Customers set IsDiscontinued = @IsDiscontinued, DiscontinuedOn=NULL, DiscontinuedBy=''
+			where CustomerID=@CustomerID
+		END
+	END
+END
+
+go
+
+Create Procedure spGetCustomers(
+	@CustomerID	bigint = -1,
+	@Filter bit = 1
+)
+as
+BEGIN
+	IF(@Filter = 1 and @CustomerID = -1)
+	BEGIN
+		Select * from Customers where IsDiscontinued=0
+	END
+	ELSE IF EXISTS(Select * from Customers where CustomerID=@CustomerID)
+	BEGIN
+		Select * from Customers where CustomerID=@CustomerID
+	END
+	ELSE IF(@Filter = 0 and @CustomerID=-1)
+	BEGIN
+		Select * from Customers
+	END
+END
+
+Create Procedure spAccounts(
+	@AccountID		bigint = -1,
+	@AccNo			bigint,
+	@CustomerID		bigint,
+	@OpeningDate	date,
+	@ClosingDate	date = null,
+	@DailyAmt		smallmoney,
+	@IsClosed		bit = 0,
+	@UserName		varchar(50)	
+)
+as
+BEGIN
+	IF(@AccountID = -1)
+	BEGIN
+		Insert into Accounts(AccNo, CustomerID, OpeningDate, DailyAmt, CreatedBy, CreatedOn, IsClosed)
+				values(@AccNo, @CustomerID, @OpeningDate, @DailyAmt, @UserName, SYSDATETIME(), @IsClosed)
+	END
+	ELSE
+	BEGIN
+		Update Accounts set AccNo=@AccNo, CustomerID=@CustomerID, OpeningDate=@OpeningDate, DailyAmt=@DailyAmt, ModifiedBy=@UserName, ModifiedOn=SYSDATETIME()
+		where AccountID=@AccountID
+		IF(@IsClosed = 1)
+		BEGIN
+			Update Accounts set ClosingDate=@ClosingDate, ModifiedOn=SYSDATETIME(), ModifiedBy=@UserName, IsClosed=@IsClosed
+			where AccountID=@AccountID
+		END
+		ELSE
+		BEGIN
+			Update Accounts set ClosingDate=NULL, ModifiedOn=SYSDATETIME(), ModifiedBy=@UserName, IsClosed=@IsClosed
+			where AccountID=@AccountID
+		END
+	END
+END
+go
+
+Create Procedure IsAccNoAvailable(
+	@AccNo	bigint
+)
+as
+BEGIN
+	IF EXISTS(Select AccNo from Accounts where AccNo=@AccNo)
+		Select 0
+	ELSE
+		Select 1
+END
+
+go
+
+
+Create Procedure spGetAccounts(
+	@AccNo bigint = -1,
+	@Filter tinyint = 1
+)
+as
+BEGIN
+	IF(@Filter = 1 and @AccNo = -1)
+	BEGIN	
+		Select * from Customers, Accounts 
+		where Accounts.IsClosed=0 and Customers.CustomerID = Accounts.CustomerID
+	END
+	ELSE IF(@Filter = 0 and @AccNo = -1)
+	BEGIN
+		Select * from Customers, Accounts 
+		where Customers.CustomerID = Accounts.CustomerID
+	END
+	ELSE IF EXISTS(Select * from Accounts where AccNo=@AccNo)
+	BEGIN
+		Select * from Accounts, Customers where Accounts.AccNo = @AccNo and Customers.CustomerID = Accounts.CustomerID
+	END
+END
+
+go
+
+
+Create Procedure spGetDailyTransactions(
+	@AccNo	bigint
+)
+as
+BEGIN
+	Select * from DailyTransactions where AccNo=@AccNo
+END
+
+go
+
+Create Procedure spDailyTransactions(
+	@TransactionID		bigint=-1,
+	@AccountID			bigint,
+	@TransactionDate	datetime,
+	@Amount				smallmoney,
+	@UserName			varchar(10)
+)
+as
+BEGIN
+	IF(@TransactionID = -1)
+	BEGIN
+		Insert into DailyTransactions(AccountID, TransactionDate, Amount, MadeBy)
+						values(@AccountID, @TransactionDate, @Amount, @UserName)
+	END
+	ELSE
+	BEGIN
+		Update DailyTransactions set AccountID=@AccountID, TransactionDate=@TransactionDate, Amount=@Amount, ModifiedOn=SYSDATETIME(), ModifiedBy=@UserName
+		where TransactionID=@TransactionID
+	END
+END
+
+go
+
+
+
+Create Procedure spGetCurrentDateTransactions(
+	@TransactionDate	DateTime
+)
+as
+BEGIN
+	Select DailyTransactions.TransactionID, DailyTransactions.AccountID, DailyTransactions.TransactionDate, DailyTransactions.Amount, DailyTransactions.MadeBy, DailyTransactions.ModifiedBy, DailyTransactions.ModifiedOn, 
+	Accounts.AccNo, Accounts.CustomerID, Customers.Name from DailyTransactions, Accounts, Customers 
+	where TransactionDate = @TransactionDate 
+	and DailyTransactions.AccountID = Accounts.AccountID 
+	and Accounts.CustomerID = Customers.CustomerID
+END
