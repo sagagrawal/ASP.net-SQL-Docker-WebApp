@@ -1,5 +1,5 @@
 # ASP.net-app-for-PigmyAgent
-This repo contains an application developed in ASP.net with SQL being the database for Pigmy Agent those work in co-operative bank. 
+This repo contains an application developed in ASP.net with SQL being the database for Pigmy Agent those work for co-operative bank. 
 
 To get this app working on your local system, kindly follow below steps:
 1. Download this project solution on your local system(zip format)
