@@ -8,7 +8,7 @@ services:
         ports:
             - "8000:80"
         volumes:
-            - C:/Users/sagagrawal/udemy/SelfAssignments/Publish/:C:\inetpub\wwwroot\
+            - C:/Users/sagagrawal/Project/Publish/:C:\inetpub\wwwroot\
     sqldb:
         image: microsoft/mssql-server-windows-express
         networks: 
@@ -19,9 +19,9 @@ services:
         environment: 
             - sa_password=Sagar1
             - ACCEPT_EULA=Y
-            - attach_dbs=[{'dbName':'PigmyPlus','dbFiles':['C:\\SQLServer\\PigmyPlus.mdf','C:\\SQLServer\\PigmyPlus_log.ldf']}]
+            - attach_dbs=[{'dbName':'PigmyPlus','dbFiles':['C:\\Users\\sagagrawal\\Project\\SQLServer\\PigmyPlus.mdf','C:\\Users\\sagagrawal\\Project\\SQLServer\\PigmyPlus_log.ldf']}]
         volumes: 
-            - C:/Users/sagagrawal/udemy/SelfAssignments/SQLServer/Db/:C:/SQLServer/
+            - C:/Users/sagagrawal/Project/SQLServer/Db/:C:/SQLServer/
 
 networks:
     backend:
