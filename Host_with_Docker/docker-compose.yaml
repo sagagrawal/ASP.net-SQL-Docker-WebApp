@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+    pigmyplusapp:
+        image: mcr.microsoft.com/dotnet/framework/aspnet:4.8
+        networks: 
+            - backend
+        ports:
+            - "8000:80"
+        volumes:
+            - C:/Users/sagagrawal/udemy/SelfAssignments/Publish/:C:\inetpub\wwwroot\
+    sqldb:
+        image: microsoft/mssql-server-windows-express
+        networks: 
+            backend:
+                ipv4_address: 172.10.18.254
+        ports:
+            - "1433:1433"
+        environment: 
+            - sa_password=Sagar1
+            - ACCEPT_EULA=Y
+            - attach_dbs=[{'dbName':'PigmyPlus','dbFiles':['C:\\SQLServer\\PigmyPlus.mdf','C:\\SQLServer\\PigmyPlus_log.ldf']}]
+        volumes: 
+            - C:/Users/sagagrawal/udemy/SelfAssignments/SQLServer/Db/:C:/SQLServer/
+
+networks:
+    backend:
+        ipam:
+            driver: ics
+            config:
+                - subnet: "172.10.0.0/16"
