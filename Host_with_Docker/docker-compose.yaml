@@ -9,6 +9,8 @@ services:
             - "8000:80"
         volumes:
             - ./Publish/:C:\inetpub\wwwroot\
+        depends_on: 
+            - sqldb            
     sqldb:
         image: microsoft/mssql-server-windows-express
         networks: 
